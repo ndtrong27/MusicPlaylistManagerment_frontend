@@ -9,6 +9,16 @@ import {
 import { BiLibrary } from "react-icons/bi";
 
 export default function HomePage() {
+  const handleConnectSpotify = () => {
+    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID || "";
+    const responseType = process.env.NEXT_PUBLIC_RESPONSE_TYPE || "";
+    const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI || "";
+
+    const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=${responseType}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+
+    window.location.href = authUrl;
+  };
+
   return (
     <div className="min-h-screen bg-[#0a0a1a] text-[#f8fafc] selection:bg-primary-500 selection:text-white">
       {/* Navbar (Landing) */}
@@ -25,9 +35,12 @@ export default function HomePage() {
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
             <Link href="#features" className="hover:text-white transition-colors cursor-pointer">Features</Link>
             <Link href="#how-it-works" className="hover:text-white transition-colors cursor-pointer">How it Works</Link>
-            <Link href="/login" className="px-5 py-2.5 rounded-full bg-white text-black hover:bg-gray-200 transition-all font-semibold cursor-pointer">
+            <button
+              onClick={handleConnectSpotify}
+              className="px-5 py-2.5 rounded-full bg-white text-black hover:bg-gray-200 transition-all font-semibold cursor-pointer"
+            >
               Connect Spotify
-            </Link>
+            </button>
           </nav>
         </div>
       </header>
