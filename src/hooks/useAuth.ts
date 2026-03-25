@@ -1,30 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { authService } from "@/services/authService";
-import type { User } from "@/types";
+import { useAuth as useAuthContext } from "@/context/AuthContext";
 
+/**
+ * Hook to access the authentication context.
+ * The token and user data are stored in React state via the AuthProvider.
+ */
 export function useAuth() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-    authService
-      .getProfile()
-      .then(setUser)
-      .catch(() => localStorage.removeItem("token"))
-      .finally(() => setLoading(false));
-  }, []);
-
-  const logout = () => {
-    authService.logout();
-    setUser(null);
+  const context = useAuthContext();
+  
+  return {
+    user: context.user,
+    token: context.token,
+    loading: context.isLoading,
+    isAuthenticated: context.isAuthenticated,
+    login: context.login,
+    logout: context.logout,
   };
-
-  return { user, loading, setUser, logout, isAuthenticated: !!user };
 }

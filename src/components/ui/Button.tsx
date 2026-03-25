@@ -2,18 +2,19 @@ import { cn } from "@/lib/utils";
 import { forwardRef } from "react";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "ghost" | "danger";
+  variant?: "primary" | "secondary" | "ghost" | "danger" | "white";
   size?: "sm" | "md" | "lg";
   loading?: boolean;
 }
 
 const variantClasses = {
   primary:
-    "bg-primary-500 hover:bg-primary-600 text-white shadow-lg shadow-primary-500/20",
+    "bg-accent-green hover:bg-accent-green/90 text-bg-dark shadow-lg shadow-accent-green/20 hover:shadow-accent-green/40 hover:-translate-y-0.5 active:scale-[0.98]",
   secondary:
-    "bg-gray-800 hover:bg-gray-700 text-gray-100 border border-gray-700",
-  ghost: "hover:bg-gray-800 text-gray-300",
-  danger: "bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-600/20",
+    "bg-primary-700 hover:bg-primary-700/90 text-text-light shadow-lg shadow-primary-700/20 hover:shadow-primary-700/40 hover:-translate-y-0.5 active:scale-[0.98]",
+  ghost: "hover:bg-white/10 text-text-light/60 hover:text-text-light active:scale-[0.98]",
+  danger: "bg-red-500 hover:bg-red-600 text-white shadow-lg shadow-red-500/20 hover:shadow-red-500/40 hover:-translate-y-0.5 active:scale-[0.98]",
+  white: "bg-white hover:bg-gray-100 text-bg-dark shadow-lg shadow-white/10 hover:shadow-white/20 hover:-translate-y-0.5 active:scale-[0.98]",
 };
 
 const sizeClasses = {

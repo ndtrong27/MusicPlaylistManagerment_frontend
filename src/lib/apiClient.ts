@@ -5,29 +5,25 @@ const apiClient = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true, // Needed for sending/receiving HTTP-only cookies like refresh_token
 });
 
-// Request interceptor - attach JWT token
-apiClient.interceptors.request.use(
-  (config) => {
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+export const setAuthToken = (token: string | null) => {
+  if (token) {
+    apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  } else {
+    delete apiClient.defaults.headers.common["Authorization"];
+  }
+};
 
 // Response interceptor - handle auth errors
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("token");
-        window.location.href = "/login";
+    if (error.response?.status === 401 && error.config?.url !== "/auth/refresh") {
+      if (typeof window !== "undefined" && window.location.pathname !== "/") {
+        // Token expired or invalid, and standard refresh failed
+        window.location.href = "/"; // Go back to landing
       }
     }
     return Promise.reject(error);

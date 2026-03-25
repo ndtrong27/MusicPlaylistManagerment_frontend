@@ -1,17 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Righteous&display=swap');
 @import "tailwindcss";
 
+@theme {
+  --font-righteous: "Righteous", cursive;
+  --font-poppins: "Poppins", sans-serif;
+  --color-primary-900: #1E1B4B;
+  --color-primary-700: #4338CA;
+  --color-accent-green: #22C55E;
+  --color-bg-dark: #0A0A1F;
+  --color-text-light: #F8FAFC;
+}
+
 :root {
-  --background: #0a0a1a;
-  --foreground: #f8fafc;
-  --font-righteous: 'Righteous', cursive;
-  --font-poppins: 'Poppins', sans-serif;
+  --background: #0A0A1F;
+  --foreground: #F8FAFC;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), var(--font-poppins), sans-serif;
+  font-family: var(--font-poppins), sans-serif;
 }
 
 /* Custom scrollbar */

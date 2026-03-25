@@ -19,9 +19,7 @@ export const authService = {
   },
 
   logout: () => {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("token");
-    }
+    // Logout is handled by the AuthContext which clears state and triggers a backend cookie wipe.
   },
 
   getProfile: async () => {
