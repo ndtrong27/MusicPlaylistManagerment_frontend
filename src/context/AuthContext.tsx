@@ -11,18 +11,18 @@ interface User {
 }
 
 interface AuthContextType {
-  token: string | null;
+  accessToken: string | null;
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (token: string, user?: User) => void;
+  login: (accessToken: string, user?: User) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [token, setTokenState] = useState<string | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -31,11 +31,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const initializeAuth = async () => {
       try {
         // Attempt to automatically refresh the token using the HTTP-only cookie
-        const res = await apiClient.post("/auth/refresh");
+        const res = await apiClient.get("/auth/refresh");
         if (res.data?.success && res.data?.data?.access_token) {
           const newToken = res.data.data.access_token;
           const userData = res.data.data.user;
-          setTokenState(newToken);
+          setAccessToken(newToken);
           setAuthToken(newToken);
           if (userData) setUser(userData);
         }
@@ -51,7 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = (newToken: string, userData?: User) => {
-    setTokenState(newToken);
+    setAccessToken(newToken);
     setAuthToken(newToken);
     if (userData) setUser(userData);
   };
@@ -63,7 +63,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (err) {
       console.error("Logout error", err);
     } finally {
-      setTokenState(null);
+      setAccessToken(null);
       setUser(null);
       setAuthToken(null);
       window.location.href = "/"; // Redirect to landing page
@@ -73,9 +73,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   return (
     <AuthContext.Provider
       value={{
-        token,
+        accessToken,
         user,
-        isAuthenticated: !!token,
+        isAuthenticated: !!accessToken,
         isLoading,
         login,
         logout,

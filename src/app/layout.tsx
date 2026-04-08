@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 import { AuthProvider } from "@/context/AuthContext";
+import { DashboardProvider } from "@/context/DashboardContext";
 
 export default function RootLayout({
   children,
@@ -28,7 +29,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${outfit.variable} antialiased bg-gray-950 text-white`}>
         <AuthProvider>
-          {children}
+          <DashboardProvider>
+            {children}
+          </DashboardProvider>
         </AuthProvider>
       </body>
     </html>

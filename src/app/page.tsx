@@ -1,22 +1,32 @@
 "use client";
-
+import { createClient, type Provider } from '@supabase/supabase-js';
 import Link from "next/link";
 import {
   FiMusic, FiPlayCircle, FiZap, FiDownload,
   FiShare2, FiUsers, FiTrendingUp, FiLayers,
   FiCheckCircle, FiArrowRight
 } from "react-icons/fi";
+
 import { BiLibrary } from "react-icons/bi";
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL as string, (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY) as string)
+const provider = 'spotify' as Provider
 
 export default function HomePage() {
-  const handleConnectSpotify = () => {
-    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID || "";
-    const responseType = process.env.NEXT_PUBLIC_RESPONSE_TYPE || "";
-    const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI || "";
-
-    const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=${responseType}&redirect_uri=${encodeURIComponent(redirectUri)}`;
-
-    window.location.href = authUrl;
+  const handleConnectSpotify = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: process.env.NEXT_PUBLIC_REDIRECT_URI as string,
+        scopes: [
+          "user-read-private",
+          "user-read-email",
+          "playlist-read-private",
+          "playlist-read-collaborative",
+          "user-library-read",
+          "user-read-recently-played",
+        ].join(" "),
+      },
+    })
   };
 
   return (
